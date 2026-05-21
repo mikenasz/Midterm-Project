@@ -26,6 +26,11 @@ def filter_years(df):
 def drop_nulls(df):
     df = df.dropna()
     return df
+
+def drop_and_rename_columns(df):
+    df = df.drop(columns=['GEO_ID'])
+    df = df.rename(columns={'#YR': 'year', 'POP_DENS': 'population_density', 'TFR': 'fertility_rate', 'GR': 'growth_rate', 'E0': 'life_expectancy', 'POP': 'total_population'})
+    return df
     
 def transform_df(df):
     
@@ -33,7 +38,7 @@ def transform_df(df):
     df = transform_country(df)
     df = filter_years(df)
     df = drop_nulls(df)
-    
+    df = drop_and_rename_columns(df)
     print(f"Row count after transformation {len(df)} ")
     return df
     

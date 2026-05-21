@@ -22,10 +22,13 @@ Extracting from Pandas
 Transforming
 - Look for columns that need to be transformed, drop nulls, blanks, and clean
 - Time estimate : 4 hrs
+- Actual : 5 hrs
+
 
 Load to SQL
 - Use pandas function to_sql to load transformed data into SQL, mapped correctly to our DDL, validate in DB editor for records
 - Time estimate : 3 hrs
+- Actual : 2 hrs
 
 Visualizations
 - Use Dash to display visualizations from our data, use appropriate chart types.
