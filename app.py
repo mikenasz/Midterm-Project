@@ -24,12 +24,16 @@ full_data = get_dataset(engine)
 
 def get_avgs(df):
     df = df.groupby(['country_name'], as_index = False)[['population_density', 'fertility_rate', 'life_expectancy']].mean()
-    df = df[df['population_density'] < 2000]
     return df
 
 all_countries = full_data['country_name'].unique().tolist()
 
 avg_df = get_avgs(full_data)
+
+filter_density = avg_df["population_density"].quantile(0.95)
+avg_df_density = avg_df[avg_df["population_density"] < filter_density]
+
+corr_matrix = avg_df[['fertility_rate', 'life_expectancy', 'population_density']].corr()
 
 def make_fr_vs_le_chart():
     fig = px.scatter(
@@ -52,7 +56,7 @@ def make_fr_vs_le_chart():
 def make_fr_vs_pd_chart():
     
     fig = px.scatter(
-        avg_df,
+        avg_df_density,
         x = "population_density",
         y = "fertility_rate",
         color = "country_name",
@@ -66,6 +70,15 @@ def make_fr_vs_pd_chart():
             "country_name": "Country"
         }
     )
+    return fig
+
+def make_coorelation_chart():
+    fig = px.imshow(
+        corr_matrix, 
+        text_auto=True, 
+        title="Correlation Matrix"
+        
+        )
     return fig
 
 
@@ -105,6 +118,16 @@ def render_tab2():
             dcc.Graph(id = "fr-time-chart"),
     
            
+        ])
+    ]
+    
+def render_coorelation_tab():
+    return [
+        html.Div([
+            html.H2("Correlation Matrix"),
+            dcc.Graph(
+                figure= make_coorelation_chart()
+            )
         ])
     ]
 @callback(
@@ -172,7 +195,8 @@ app.layout = html.Div([
     dcc.Tabs(
         [
             dcc.Tab(render_tab1(), label= "Scatter"),
-            dcc.Tab(render_tab2(), label= "Line")
+            dcc.Tab(render_tab2(), label= "Line"),
+            dcc.Tab(render_coorelation_tab(), label = "Correlation Matrix")
         ]
     )
 ])

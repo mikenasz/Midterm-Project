@@ -33,3 +33,4 @@ Load to SQL
 Visualizations
 - Use Dash to display visualizations from our data, use appropriate chart types.
 - Time estimate 4 hrs
+- Actual 7 hrs
